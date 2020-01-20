@@ -37,6 +37,8 @@ public class HeroAPIController {
 		return "Welcome to HeroAPI, please see ReadMe.md for details on using this API!";
 	}
 	
+	// TODO: add PUT method to update hero and villain data
+	
 	// Hero API methods
 	
 	@RequestMapping(method = RequestMethod.GET,value = "/hero", produces="application/json")

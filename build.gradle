@@ -27,5 +27,5 @@ test {
 }
 
 bootJar {
-	mainClassName = 'heroapi.App'
+	mainClassName = 'heroapi.HeroAPIApp'
 }
