@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import heroapi.exception.APIException;
+import heroapi.exception.ResourceNotFoundException;
 import heroapi.model.api.APIVillain;
 import heroapi.model.dao.Villain;
 import heroapi.model.repository.VillainRepository;
@@ -45,5 +46,28 @@ public class VillainService {
 			villainList.addAll(villainRepo.findByName(name));
 		}
 		return villainList;
+	}
+	
+	public Villain updateVillain(String villainId, APIVillain apiVillain) throws APIException, ResourceNotFoundException
+	{
+		if(villainId == null || villainId.isBlank()) {
+			throw new APIException("villain_id is missing from URL path");
+		}
+		
+		Villain villain = villainRepo.findById(Long.valueOf(villainId)).orElse(null);
+		
+		if(villain == null) {
+			logger.error("villain_id: {} not found in database", villainId);
+			throw new ResourceNotFoundException("Villain with id: " + villainId + " not found in database");
+		}
+		else {
+			villain.setVillainName(apiVillain.villain_name);
+			villain.setPowers(apiVillain.powers);
+			villain.setWeaknesses(apiVillain.weaknesses);
+			villain.setRealIdentity(apiVillain.real_identity);
+			villainRepo.save(villain);
+		}
+		
+		return villain;
 	}
 }

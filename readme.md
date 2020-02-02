@@ -1,7 +1,7 @@
 ## HeroAPI
 
 A simple spring boot rest service to get and create Heroes and Villains (JDK 11+ required).
-It uses H2 (in-memory) database to store information.
+It uses H2 (in-memory) database to store information. This is a demo project not to be used for production purposes.
 <br/><br/>
 build project: `.\gradlew build`
 <br/>
@@ -23,6 +23,10 @@ GET:
 POST:
 /villain - adds a new villain to the database, accepts data as JSON
 /hero - adds a new hero to the database, accepts data as JSON
+
+PUT
+/villain/{villain Id} - updates this villain data, accepts data as JSON
+/hero/{hero Id} - updates this hero data, accepts data as JSON
 ```
 
 Example Villain JSON Request Body:

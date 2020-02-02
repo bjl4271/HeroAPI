@@ -49,6 +49,22 @@ public class Villain {
 		return realIdentity;
 	}
 	
+	public void setVillainName(String name) {
+		this.name = name;
+	}
+	
+	public void setPowers(String powers) {
+		this.powers = powers;
+	}
+	
+	public void setWeaknesses(String weaknesses) {
+		this.weaknesses = weaknesses;
+	}
+	
+	public void setRealIdentity(String realIdentity) {
+		this.realIdentity = realIdentity;
+	}
+	
 	@Override
 	public String toString() {
 		return String.format("Villain: %s, powers: %s, weaknesses: %s", name, powers, weaknesses);

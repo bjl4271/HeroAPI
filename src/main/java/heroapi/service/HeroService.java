@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import heroapi.exception.APIException;
+import heroapi.exception.ResourceNotFoundException;
 import heroapi.model.api.APIHero;
 import heroapi.model.dao.Hero;
 import heroapi.model.repository.HeroRepository;
@@ -44,5 +45,27 @@ public class HeroService {
 			heroList.addAll(heroRepo.findByName(name));
 		}
 		return heroList;
+	}
+	
+	public Hero updateHero(String heroId, APIHero apiHero) throws APIException, ResourceNotFoundException {
+		if(heroId == null || heroId.isBlank()) {
+			throw new APIException("heroId missing from URL path");
+		}
+		
+		Hero hero = heroRepo.findById(Long.valueOf(heroId)).orElse(null);	
+		
+		if(hero == null) {
+			logger.error("hero_id: {} not found in database", heroId);
+			throw new ResourceNotFoundException("Hero with id: " + heroId + " not found in database");
+		}
+		else {
+			hero.setHeroName(apiHero.hero_name);
+			hero.setPowers(apiHero.powers);
+			hero.setWeaknesses(apiHero.weaknesses);
+			hero.setRealIdentity(apiHero.real_identity);
+			heroRepo.save(hero);
+		}
+		
+		return hero;
 	}
 }
