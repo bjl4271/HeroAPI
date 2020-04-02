@@ -27,17 +27,21 @@ import heroapi.service.VillainService;
 @RestController
 public class HeroAPIController {
 	private static final Logger logger = LoggerFactory.getLogger(HeroAPIController.class);
-	
-	@Autowired
 	private HeroService heroSerivce;
+	private VillainService villainService;
 	
 	@Autowired
-	private VillainService villainService;
+	public HeroAPIController(HeroService heroSerivce, VillainService villainService) {
+		this.heroSerivce = heroSerivce;
+		this.villainService = villainService;
+	}
 	
 	@RequestMapping(method = RequestMethod.GET, value = "/")
 	public String welcome() {
 		return "Welcome to HeroAPI, please see ReadMe.md for details on using this API!";
 	}
+	
+	// TODO: add custom exception handler for controller exceptions
 	
 	// Hero API methods
 	
