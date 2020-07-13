@@ -2,6 +2,7 @@ package heroapi.service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 import org.slf4j.LoggerFactory;
 import org.slf4j.Logger;
@@ -22,7 +23,7 @@ public class VillainService {
 	private VillainRepository villainRepo;
 	
 	public Villain createVillain(APIVillain apiVillain) throws APIException {
-		if(apiVillain.villain_id != null) {
+		if(Objects.nonNull(apiVillain.villain_id)) {
 			throw new APIException("villain_id is auto-generated and cannot have a value");
 		}
 		
@@ -37,7 +38,7 @@ public class VillainService {
 	public List<Villain> getVillain(String name) {
 		List<Villain> villainList = new ArrayList<>();
 		
-		if(name == null || name.isBlank() || name.isEmpty()) {
+		if(Objects.isNull(name) || name.isBlank()) {
 			logger.info("Getting all villains from database");
 			villainRepo.findAll().forEach(villainList::add);
 		}
@@ -50,13 +51,13 @@ public class VillainService {
 	
 	public Villain updateVillain(String villainId, APIVillain apiVillain) throws APIException, ResourceNotFoundException
 	{
-		if(villainId == null || villainId.isBlank()) {
+		if(Objects.isNull(villainId) || villainId.isBlank()) {
 			throw new APIException("villain_id is missing from URL path");
 		}
 		
 		Villain villain = villainRepo.findById(Long.valueOf(villainId)).orElse(null);
 		
-		if(villain == null) {
+		if(Objects.isNull(villain)) {
 			logger.error("villain_id: {} not found in database", villainId);
 			throw new ResourceNotFoundException("Villain with id: " + villainId + " not found in database");
 		}

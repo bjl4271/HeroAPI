@@ -2,6 +2,7 @@ package heroapi.service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 import org.slf4j.LoggerFactory;
 import org.slf4j.Logger;
@@ -22,7 +23,7 @@ public class HeroService {
 	private HeroRepository heroRepo;
 
 	public Hero createHero(APIHero apiHero) throws APIException {
-		if (apiHero.hero_id != null) {
+		if (Objects.nonNull(apiHero.hero_id)) {
 			throw new APIException("hero_id is auto-generated and cannot have a value");
 		}
 
@@ -36,7 +37,7 @@ public class HeroService {
 	public List<Hero> getHero(String name) {
 		List<Hero> heroList = new ArrayList<>();
 
-		if (name == null || name.isBlank() || name.isEmpty()) {
+		if (Objects.isNull(name) || name.isBlank()) {
 			logger.info("Getting all heroes from database");
 			heroRepo.findAll().forEach(heroList::add);
 		} else {
@@ -47,13 +48,13 @@ public class HeroService {
 	}
 
 	public Hero updateHero(String heroId, APIHero apiHero) throws APIException, ResourceNotFoundException {
-		if (heroId == null || heroId.isBlank()) {
+		if (Objects.isNull(heroId) || heroId.isBlank()) {
 			throw new APIException("heroId missing from URL path");
 		}
 
 		Hero hero = heroRepo.findById(Long.valueOf(heroId)).orElse(null);
 
-		if (hero == null) {
+		if (Objects.isNull(hero)) {
 			logger.error("hero_id: {} not found in database", heroId);
 			throw new ResourceNotFoundException("Hero with id: " + heroId + " not found in database");
 		} else {
