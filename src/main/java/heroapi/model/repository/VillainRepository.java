@@ -4,7 +4,7 @@ import java.util.List;
 
 import org.springframework.data.repository.CrudRepository;
 
-import heroapi.model.dao.Villain;
+import heroapi.model.db.Villain;
 
 public interface VillainRepository extends CrudRepository<Villain, Long> {
 

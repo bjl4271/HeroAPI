@@ -1,4 +1,4 @@
-package heroapi.model.dao;
+package heroapi.model.db;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;

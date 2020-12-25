@@ -19,8 +19,8 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import heroapi.controller.HeroAPIController;
-import heroapi.model.dao.Hero;
-import heroapi.model.dao.Villain;
+import heroapi.model.db.Hero;
+import heroapi.model.db.Villain;
 import heroapi.service.HeroService;
 import heroapi.service.VillainService;
 

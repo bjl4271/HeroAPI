@@ -7,8 +7,8 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 
-import heroapi.model.dao.Hero;
-import heroapi.model.dao.Villain;
+import heroapi.model.db.Hero;
+import heroapi.model.db.Villain;
 import heroapi.model.repository.HeroRepository;
 import heroapi.model.repository.VillainRepository;
 
