@@ -14,6 +14,7 @@ import heroapi.exception.ResourceNotFoundException;
 import heroapi.model.api.APIVillain;
 import heroapi.model.db.Villain;
 import heroapi.model.repository.VillainRepository;
+import heroapi.util.APIMapper;
 
 @Service
 public class VillainService {
@@ -22,7 +23,7 @@ public class VillainService {
     @Autowired
     private VillainRepository villainRepo;
 
-    public Villain createVillain(APIVillain apiVillain) throws APIException {
+    public APIVillain createVillain(APIVillain apiVillain) throws APIException {
         if (Objects.nonNull(apiVillain.villain_id)) {
             throw new APIException("villain_id is auto-generated and cannot have a value");
         }
@@ -32,15 +33,17 @@ public class VillainService {
         villainRepo.save(villain);
         logger.info("Created new Villain: {} in database", villain.toString());
 
-        return villain;
+        return APIMapper.convertVillainToAPIVillain(villain);
     }
 
-    public List<Villain> getVillain(String name) {
-        List<Villain> villainList = new ArrayList<>();
+    public List<APIVillain> getVillain(String name) {
+        List<APIVillain> villainList = new ArrayList<>();
 
         if (Objects.isNull(name) || name.isBlank()) {
             logger.info("Getting all villains from database");
-            villainRepo.findAll().forEach(villainList::add);
+            villainRepo.findAll().forEach((villain) -> {
+                villainList.add(APIMapper.convertVillainToAPIVillain(villain));
+            });
         } else {
             Villain villain = villainRepo.findByName(name);
             
@@ -51,12 +54,12 @@ public class VillainService {
             }
             
             logger.info("Getting villain by name: {} from database", name);
-            villainList.add(villain);
+            villainList.add(APIMapper.convertVillainToAPIVillain(villain));
         }
         return villainList;
     }
 
-    public Villain updateVillain(String villainId, APIVillain apiVillain)
+    public APIVillain updateVillain(String villainId, APIVillain apiVillain)
             throws APIException, ResourceNotFoundException {
         if (Objects.isNull(villainId) || villainId.isBlank()) {
             throw new APIException("villain_id is missing from URL path");
@@ -76,6 +79,6 @@ public class VillainService {
             villainRepo.save(villain);
         }
 
-        return villain;
+        return APIMapper.convertVillainToAPIVillain(villain);
     }
 }

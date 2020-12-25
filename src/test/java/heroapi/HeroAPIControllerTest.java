@@ -23,6 +23,8 @@ import heroapi.controller.HeroAPIController;
 import heroapi.exception.APIException;
 import heroapi.exception.ResourceNotFoundException;
 import heroapi.exception.RestExceptionHandler;
+import heroapi.model.api.APIHero;
+import heroapi.model.api.APIVillain;
 import heroapi.model.db.Hero;
 import heroapi.model.db.Villain;
 import heroapi.service.HeroService;
@@ -71,49 +73,49 @@ public class HeroAPIControllerTest {
 
     @Test
     public void test_createHero() throws Exception {
-        Hero hero = new Hero("Superman", "Clark Kent", "Super everything", "Kryptonite");
+        APIHero hero = new APIHero(0L, "Superman", "Clark Kent", "Super everything", "Kryptonite");
 
         when(heroServiceMock.createHero(any())).thenReturn(hero);
 
         mvc.perform(
                 post("/hero").contentType(MediaType.APPLICATION_JSON).content(objMapper.writeValueAsString(apiHero)))
-                .andExpect(status().isOk()).andExpect(jsonPath("$.data.heroName", equalTo(hero.getHeroName())))
-                .andExpect(jsonPath("$.data.powers", equalTo(hero.getPowers())))
-                .andExpect(jsonPath("$.data.weaknesses", equalTo(hero.getWeaknesses())))
-                .andExpect(jsonPath("$.data.realIdentity", equalTo(hero.getRealIdentity())));
+                .andExpect(status().isOk()).andExpect(jsonPath("$.data.hero_name", equalTo(hero.hero_name)))
+                .andExpect(jsonPath("$.data.powers", equalTo(hero.powers)))
+                .andExpect(jsonPath("$.data.weaknesses", equalTo(hero.weaknesses)))
+                .andExpect(jsonPath("$.data.real_identity", equalTo(hero.real_identity)));
     }
 
     @Test
     public void test_updateHero() throws Exception {
-        Hero hero = new Hero("Superman", "Clark Kent", "Man of Steel", "Kryptonite");
+        APIHero hero = new APIHero(0L, "Superman", "Clark Kent", "Man of Steel", "Kryptonite");
 
         when(heroServiceMock.updateHero(anyString(), any())).thenReturn(hero);
 
         mvc.perform(
                 put("/hero/1").contentType(MediaType.APPLICATION_JSON).content(objMapper.writeValueAsString(apiHero)))
-                .andExpect(status().isOk()).andExpect(jsonPath("$.data.heroName", equalTo(hero.getHeroName())))
-                .andExpect(jsonPath("$.data.powers", equalTo(hero.getPowers())))
-                .andExpect(jsonPath("$.data.weaknesses", equalTo(hero.getWeaknesses())))
-                .andExpect(jsonPath("$.data.realIdentity", equalTo(hero.getRealIdentity())));
+                .andExpect(status().isOk()).andExpect(jsonPath("$.data.hero_name", equalTo(hero.hero_name)))
+                .andExpect(jsonPath("$.data.powers", equalTo(hero.powers)))
+                .andExpect(jsonPath("$.data.weaknesses", equalTo(hero.weaknesses)))
+                .andExpect(jsonPath("$.data.real_identity", equalTo(hero.real_identity)));
     }
 
     @Test
     public void test_getHero() throws Exception {
-        Hero hero = new Hero("Superman", "Clark Kent", "Super everything", "Kryptonite");
+        APIHero hero = new APIHero(0L, "Superman", "Clark Kent", "Super everything", "Kryptonite");
 
         when(heroServiceMock.getHero("Superman")).thenReturn(List.of(hero));
 
         mvc.perform(get("/hero?name=Superman")).andExpect(status().isOk())
-                .andExpect(jsonPath("$.data[0].heroName", equalTo(hero.getHeroName())))
-                .andExpect(jsonPath("$.data[0].powers", equalTo(hero.getPowers())))
-                .andExpect(jsonPath("$.data[0].weaknesses", equalTo(hero.getWeaknesses())))
-                .andExpect(jsonPath("$.data[0].realIdentity", equalTo(hero.getRealIdentity())));
+                .andExpect(jsonPath("$.data[0].hero_name", equalTo(hero.hero_name)))
+                .andExpect(jsonPath("$.data[0].powers", equalTo(hero.powers)))
+                .andExpect(jsonPath("$.data[0].weaknesses", equalTo(hero.weaknesses)))
+                .andExpect(jsonPath("$.data[0].real_identity", equalTo(hero.real_identity)));
     }
 
     @Test
     public void test_getAllHeroes() throws Exception {
-        List<Hero> heroList = List.of(new Hero("Superman", "Clark Kent", "Super everything", "Kryptonite"),
-                new Hero("Batman", "Bruce Wayne", "Ace Detective", "None"));
+        List<APIHero> heroList = List.of(new APIHero(0L, "Superman", "Clark Kent", "Super everything", "Kryptonite"),
+                new APIHero(1L, "Batman", "Bruce Wayne", "Ace Detective", "None"));
 
         when(heroServiceMock.getHero(null)).thenReturn(heroList);
 
@@ -148,50 +150,50 @@ public class HeroAPIControllerTest {
 
     @Test
     public void test_createVillain() throws Exception {
-        Villain villain = new Villain("Captain Cold", "Leonard Snart", "Ice Control, Weapon Master", "Human");
+        APIVillain villain = new APIVillain(0L, "Captain Cold", "Leonard Snart", "Ice Control, Weapon Master", "Human");
 
         when(villainServiceMock.createVillain(any())).thenReturn(villain);
 
         mvc.perform(post("/villain").contentType(MediaType.APPLICATION_JSON)
                 .content(objMapper.writeValueAsString(apiVillain))).andExpect(status().isOk())
-                .andExpect(jsonPath("$.data.villainName", equalTo(villain.getVillainName())))
-                .andExpect(jsonPath("$.data.powers", equalTo(villain.getPowers())))
-                .andExpect(jsonPath("$.data.weaknesses", equalTo(villain.getWeaknesses())))
-                .andExpect(jsonPath("$.data.realIdentity", equalTo(villain.getRealIdentity())));
+                .andExpect(jsonPath("$.data.villain_name", equalTo(villain.villain_name)))
+                .andExpect(jsonPath("$.data.powers", equalTo(villain.powers)))
+                .andExpect(jsonPath("$.data.weaknesses", equalTo(villain.weaknesses)))
+                .andExpect(jsonPath("$.data.real_identity", equalTo(villain.real_identity)));
     }
 
     @Test
     public void test_updateVillain() throws Exception {
-        Villain villain = new Villain("Captain Cold", "Leonard Snart", "really cold", "Snowman");
+        APIVillain villain = new APIVillain(0L, "Captain Cold", "Leonard Snart", "really cold", "Snowman");
 
         when(villainServiceMock.updateVillain(anyString(), any())).thenReturn(villain);
 
         mvc.perform(put("/villain/1").contentType(MediaType.APPLICATION_JSON)
                 .content(objMapper.writeValueAsString(apiVillain))).andExpect(status().isOk())
-                .andExpect(jsonPath("$.data.villainName", equalTo(villain.getVillainName())))
-                .andExpect(jsonPath("$.data.powers", equalTo(villain.getPowers())))
-                .andExpect(jsonPath("$.data.weaknesses", equalTo(villain.getWeaknesses())))
-                .andExpect(jsonPath("$.data.realIdentity", equalTo(villain.getRealIdentity())));
+                .andExpect(jsonPath("$.data.villain_name", equalTo(villain.villain_name)))
+                .andExpect(jsonPath("$.data.powers", equalTo(villain.powers)))
+                .andExpect(jsonPath("$.data.weaknesses", equalTo(villain.weaknesses)))
+                .andExpect(jsonPath("$.data.real_identity", equalTo(villain.real_identity)));
     }
 
     @Test
     public void test_getVillain() throws Exception {
-        Villain villain = new Villain("Captain Cold", "Leonard Snart", "Ice Control, Weapon Master", "Human");
+        APIVillain villain = new APIVillain(0L, "Captain Cold", "Leonard Snart", "Ice Control, Weapon Master", "Human");
 
         when(villainServiceMock.getVillain("Captain Cold")).thenReturn(List.of(villain));
 
         mvc.perform(get("/villain?name=Captain Cold")).andExpect(status().isOk())
-                .andExpect(jsonPath("$.data[0].villainName", equalTo(villain.getVillainName())))
-                .andExpect(jsonPath("$.data[0].powers", equalTo(villain.getPowers())))
-                .andExpect(jsonPath("$.data[0].weaknesses", equalTo(villain.getWeaknesses())))
-                .andExpect(jsonPath("$.data[0].realIdentity", equalTo(villain.getRealIdentity())));
+                .andExpect(jsonPath("$.data[0].villain_name", equalTo(villain.villain_name)))
+                .andExpect(jsonPath("$.data[0].powers", equalTo(villain.powers)))
+                .andExpect(jsonPath("$.data[0].weaknesses", equalTo(villain.weaknesses)))
+                .andExpect(jsonPath("$.data[0].real_identity", equalTo(villain.real_identity)));
     }
 
     @Test
     public void test_getAllVillains() throws Exception {
-        List<Villain> villainList = List.of(
-                new Villain("Professor Zoom", "Eobard Thawne", "Negative Speed Force", "Insanity"),
-                new Villain("Captain Cold", "Leonard Snart", "Ice Control, Weapon Master", "Human"));
+        List<APIVillain> villainList = List.of(
+                new APIVillain(0L, "Professor Zoom", "Eobard Thawne", "Negative Speed Force", "Insanity"),
+                new APIVillain(1L, "Captain Cold", "Leonard Snart", "Ice Control, Weapon Master", "Human"));
 
         when(villainServiceMock.getVillain(null)).thenReturn(villainList);
 

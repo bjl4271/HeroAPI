@@ -8,4 +8,12 @@ public class APIVillain {
 	public String weaknesses;
 	
 	public APIVillain() {}
+	
+	public APIVillain(Long id, String name, String identity, String powers, String weakness) {
+	    this.villain_id = id;
+	    this.villain_name = name;
+	    this.real_identity = identity;
+	    this.powers = powers;
+	    this.weaknesses = weakness;
+	}
 }

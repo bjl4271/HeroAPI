@@ -14,6 +14,7 @@ import heroapi.exception.ResourceNotFoundException;
 import heroapi.model.api.APIHero;
 import heroapi.model.db.Hero;
 import heroapi.model.repository.HeroRepository;
+import heroapi.util.APIMapper;
 
 @Service
 public class HeroService {
@@ -22,7 +23,7 @@ public class HeroService {
     @Autowired
     private HeroRepository heroRepo;
 
-    public Hero createHero(APIHero apiHero) throws APIException {
+    public APIHero createHero(APIHero apiHero) throws APIException {
         if (Objects.nonNull(apiHero.hero_id)) {
             throw new APIException("hero_id is auto-generated and cannot have a value");
         }
@@ -31,15 +32,17 @@ public class HeroService {
         heroRepo.save(hero);
         logger.info("Created new hero: {} in database", hero.toString());
 
-        return hero;
+        return APIMapper.convertHeroToAPIHero(hero);
     }
 
-    public List<Hero> getHero(String name) {
-        List<Hero> heroList = new ArrayList<>();
+    public List<APIHero> getHero(String name) {
+        List<APIHero> heroList = new ArrayList<>();
 
         if (Objects.isNull(name) || name.isBlank()) {
             logger.info("Getting all heroes from database");
-            heroRepo.findAll().forEach(heroList::add);
+            heroRepo.findAll().forEach((hero) -> {
+                heroList.add(APIMapper.convertHeroToAPIHero(hero));
+            });
         } else {
             Hero hero = heroRepo.findByName(name);
             
@@ -50,13 +53,13 @@ public class HeroService {
             }
             
             logger.info("Getting hero by name '{}' from database", name);
-            heroList.add(hero);
+            heroList.add(APIMapper.convertHeroToAPIHero(hero));
         }
         
         return heroList;
     }
 
-    public Hero updateHero(String heroId, APIHero apiHero) throws APIException, ResourceNotFoundException {
+    public APIHero updateHero(String heroId, APIHero apiHero) throws APIException, ResourceNotFoundException {
         if (Objects.isNull(heroId) || heroId.isBlank()) {
             throw new APIException("heroId missing from URL path");
         }
@@ -75,6 +78,6 @@ public class HeroService {
             heroRepo.save(hero);
         }
 
-        return hero;
+        return APIMapper.convertHeroToAPIHero(hero);
     }
 }

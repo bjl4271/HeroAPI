@@ -17,8 +17,6 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import heroapi.exception.APIException;
-import heroapi.exception.ResourceNotFoundException;
 import heroapi.model.api.APIHero;
 import heroapi.model.api.APIResponse;
 import heroapi.model.api.APIVillain;
@@ -47,9 +45,9 @@ public class HeroAPIController {
     // Hero API methods
 
     @GetMapping(value = "/hero", produces = "application/json")
-    public ResponseEntity<APIResponse<List<Hero>>> getHero(
+    public ResponseEntity<APIResponse<List<APIHero>>> getHero(
             @RequestParam(value = "name", required = false) String name) {
-        APIResponse<List<Hero>> apiResponse = new APIResponse<>(heroSerivce.getHero(name), HttpStatus.OK.value(),
+        APIResponse<List<APIHero>> apiResponse = new APIResponse<>(heroSerivce.getHero(name), HttpStatus.OK.value(),
                 "Successfully retrieved heroes");
 
         logger.info("GET Hero Response:[status = {}, message = {}]", apiResponse.status_code, apiResponse.message);
@@ -58,10 +56,10 @@ public class HeroAPIController {
     }
 
     @PostMapping(value = "/hero", consumes = "application/json")
-    public ResponseEntity<APIResponse<Hero>> createHero(@RequestBody APIHero hero) {
-        APIResponse<Hero> apiResponse = null;
+    public ResponseEntity<APIResponse<APIHero>> createHero(@RequestBody APIHero hero) {
+        APIResponse<APIHero> apiResponse = null;
 
-        Hero newHero = heroSerivce.createHero(hero);
+        APIHero newHero = heroSerivce.createHero(hero);
         apiResponse = new APIResponse<>(newHero, HttpStatus.OK.value(), "Successfully added hero to database");
         
         logger.info("POST Hero Response:[status = {}, message = {}]", apiResponse.status_code, apiResponse.message);
@@ -70,10 +68,10 @@ public class HeroAPIController {
     }
 
     @PutMapping(value = "/hero/{heroId}", consumes = "application/json")
-    public ResponseEntity<APIResponse<Hero>> updateHero(@RequestBody APIHero hero, @PathVariable String heroId) {
-        APIResponse<Hero> apiResponse = null;
+    public ResponseEntity<APIResponse<APIHero>> updateHero(@RequestBody APIHero hero, @PathVariable String heroId) {
+        APIResponse<APIHero> apiResponse = null;
 
-        Hero updateHero = heroSerivce.updateHero(heroId, hero);
+        APIHero updateHero = heroSerivce.updateHero(heroId, hero);
         apiResponse = new APIResponse<>(updateHero, HttpStatus.OK.value(), "Successfully updated hero");
         
         logger.info("PUT Hero Response:[status = {}, message = {}]", apiResponse.status_code, apiResponse.message);
@@ -84,9 +82,9 @@ public class HeroAPIController {
     // Villain API methods
 
     @GetMapping(value = "/villain", produces = "application/json")
-    public ResponseEntity<APIResponse<List<Villain>>> getVillain(
+    public ResponseEntity<APIResponse<List<APIVillain>>> getVillain(
             @RequestParam(value = "name", required = false) String name) {
-        APIResponse<List<Villain>> apiResponse = new APIResponse<>(villainService.getVillain(name),
+        APIResponse<List<APIVillain>> apiResponse = new APIResponse<>(villainService.getVillain(name),
                 HttpStatus.OK.value(), "Successfully retrieved villains");
 
         logger.info("GET Villain Response:[status = {}, message = {}]", apiResponse.status_code, apiResponse.message);
@@ -95,10 +93,10 @@ public class HeroAPIController {
     }
 
     @PostMapping(value = "/villain", consumes = "application/json")
-    public ResponseEntity<APIResponse<Villain>> createVillain(@RequestBody APIVillain villain) {
-        APIResponse<Villain> apiResponse = null;
+    public ResponseEntity<APIResponse<APIVillain>> createVillain(@RequestBody APIVillain villain) {
+        APIResponse<APIVillain> apiResponse = null;
    
-        Villain newVillain = villainService.createVillain(villain);
+        APIVillain newVillain = villainService.createVillain(villain);
         apiResponse = new APIResponse<>(newVillain, HttpStatus.OK.value(),
                 "Successfully added villain to database");
 
@@ -109,11 +107,11 @@ public class HeroAPIController {
     }
 
     @PutMapping(value = "/villain/{villainId}", consumes = "application/json")
-    public ResponseEntity<APIResponse<Villain>> updateVillain(@RequestBody APIVillain villain,
+    public ResponseEntity<APIResponse<APIVillain>> updateVillain(@RequestBody APIVillain villain,
             @PathVariable String villainId) {
-        APIResponse<Villain> apiResponse = null;
+        APIResponse<APIVillain> apiResponse = null;
 
-        Villain updateVillain = villainService.updateVillain(villainId, villain);
+        APIVillain updateVillain = villainService.updateVillain(villainId, villain);
         apiResponse = new APIResponse<>(updateVillain, HttpStatus.OK.value(), "Successfully updated Villain");
         
         logger.info("PUT Villain Response:[status = {}, message = {}]", apiResponse.status_code, apiResponse.message);
