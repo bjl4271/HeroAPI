@@ -5,6 +5,7 @@ import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -19,6 +20,9 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import heroapi.controller.HeroAPIController;
+import heroapi.exception.APIException;
+import heroapi.exception.ResourceNotFoundException;
+import heroapi.exception.RestExceptionHandler;
 import heroapi.model.db.Hero;
 import heroapi.model.db.Villain;
 import heroapi.service.HeroService;
@@ -31,14 +35,31 @@ public class HeroAPIControllerTest {
     private HeroService heroServiceMock;
     private VillainService villainServiceMock;
     private ObjectMapper objMapper;
+    private Map<String, Object> apiHero;
+    private Map<String, Object> apiVillain;
 
     @BeforeEach
     public void setupControllerTests() {
         heroServiceMock = mock(HeroService.class);
         villainServiceMock = mock(VillainService.class);
         heroController = new HeroAPIController(heroServiceMock, villainServiceMock);
-        mvc = MockMvcBuilders.standaloneSetup(heroController).build();
+        mvc = MockMvcBuilders.standaloneSetup(heroController).setControllerAdvice(RestExceptionHandler.class).build();
         objMapper = new ObjectMapper();
+        setupTestData();
+    }
+
+    private void setupTestData() {
+        apiHero = new HashMap<>();
+        apiHero.put("hero_name", "Superman");
+        apiHero.put("real_identity", "Clark Kent");
+        apiHero.put("powers", "Super everything");
+        apiHero.put("weaknesses", "Kryptonite");
+
+        apiVillain = new HashMap<>();
+        apiVillain.put("villain_name", "Captain Cold");
+        apiVillain.put("real_identity", "Leonard Snart");
+        apiVillain.put("powers", "Ice Control, Weapon Master");
+        apiVillain.put("weaknesses", "Human");
     }
 
     @Test
@@ -50,15 +71,26 @@ public class HeroAPIControllerTest {
 
     @Test
     public void test_createHero() throws Exception {
-        Map<String, Object> apiHero = Map.of("hero_name", "Superman", "real_identity", "Clark Kent", "powers",
-                "Super everything", "weaknesses", "Kryptonite");
-
         Hero hero = new Hero("Superman", "Clark Kent", "Super everything", "Kryptonite");
 
         when(heroServiceMock.createHero(any())).thenReturn(hero);
 
         mvc.perform(
                 post("/hero").contentType(MediaType.APPLICATION_JSON).content(objMapper.writeValueAsString(apiHero)))
+                .andExpect(status().isOk()).andExpect(jsonPath("$.data.heroName", equalTo(hero.getHeroName())))
+                .andExpect(jsonPath("$.data.powers", equalTo(hero.getPowers())))
+                .andExpect(jsonPath("$.data.weaknesses", equalTo(hero.getWeaknesses())))
+                .andExpect(jsonPath("$.data.realIdentity", equalTo(hero.getRealIdentity())));
+    }
+
+    @Test
+    public void test_updateHero() throws Exception {
+        Hero hero = new Hero("Superman", "Clark Kent", "Man of Steel", "Kryptonite");
+
+        when(heroServiceMock.updateHero(anyString(), any())).thenReturn(hero);
+
+        mvc.perform(
+                put("/hero/1").contentType(MediaType.APPLICATION_JSON).content(objMapper.writeValueAsString(apiHero)))
                 .andExpect(status().isOk()).andExpect(jsonPath("$.data.heroName", equalTo(hero.getHeroName())))
                 .andExpect(jsonPath("$.data.powers", equalTo(hero.getPowers())))
                 .andExpect(jsonPath("$.data.weaknesses", equalTo(hero.getWeaknesses())))
@@ -88,18 +120,53 @@ public class HeroAPIControllerTest {
         mvc.perform(get("/hero")).andExpect(status().isOk()).andExpect(jsonPath("$.data[*]", hasSize(2)));
     }
 
+    @Test
+    public void test_getHeroNotFound() throws Exception {
+        when(heroServiceMock.getHero(anyString())).thenThrow(ResourceNotFoundException.class);
+
+        mvc.perform(get("/hero?name=asdfg")).andExpect(status().isNotFound());
+    }
+
+    @Test
+    public void test_createHeroBadRequest() throws Exception {
+        when(heroServiceMock.createHero(any())).thenThrow(APIException.class);
+
+        mvc.perform(post("/hero").contentType(MediaType.APPLICATION_JSON).content(""))
+                .andExpect(status().isBadRequest());
+    }
+
+    @Test
+    public void test_updateHeroNotFound() throws Exception {
+        when(heroServiceMock.updateHero(anyString(), any())).thenThrow(ResourceNotFoundException.class);
+
+        mvc.perform(
+                put("/hero/1").contentType(MediaType.APPLICATION_JSON).content(objMapper.writeValueAsString(apiHero)))
+                .andExpect(status().isNotFound());
+    }
+
     // Villain API tests
 
     @Test
     public void test_createVillain() throws Exception {
-        Map<String, Object> apiVillain = Map.of("villain_name", "Captain Cold", "real_identity", "Leonard Snart",
-                "powers", "Ice Control, Weapon Master", "weaknesses", "Human");
-
         Villain villain = new Villain("Captain Cold", "Leonard Snart", "Ice Control, Weapon Master", "Human");
 
         when(villainServiceMock.createVillain(any())).thenReturn(villain);
 
         mvc.perform(post("/villain").contentType(MediaType.APPLICATION_JSON)
+                .content(objMapper.writeValueAsString(apiVillain))).andExpect(status().isOk())
+                .andExpect(jsonPath("$.data.villainName", equalTo(villain.getVillainName())))
+                .andExpect(jsonPath("$.data.powers", equalTo(villain.getPowers())))
+                .andExpect(jsonPath("$.data.weaknesses", equalTo(villain.getWeaknesses())))
+                .andExpect(jsonPath("$.data.realIdentity", equalTo(villain.getRealIdentity())));
+    }
+
+    @Test
+    public void test_updateVillain() throws Exception {
+        Villain villain = new Villain("Captain Cold", "Leonard Snart", "really cold", "Snowman");
+
+        when(villainServiceMock.updateVillain(anyString(), any())).thenReturn(villain);
+
+        mvc.perform(put("/villain/1").contentType(MediaType.APPLICATION_JSON)
                 .content(objMapper.writeValueAsString(apiVillain))).andExpect(status().isOk())
                 .andExpect(jsonPath("$.data.villainName", equalTo(villain.getVillainName())))
                 .andExpect(jsonPath("$.data.powers", equalTo(villain.getPowers())))
@@ -129,5 +196,28 @@ public class HeroAPIControllerTest {
         when(villainServiceMock.getVillain(null)).thenReturn(villainList);
 
         mvc.perform(get("/villain")).andExpect(status().isOk()).andExpect(jsonPath("$.data[*]", hasSize(2)));
+    }
+
+    @Test
+    public void test_getVillainNotFound() throws Exception {
+        when(villainServiceMock.getVillain(anyString())).thenThrow(ResourceNotFoundException.class);
+
+        mvc.perform(get("/villain?name=sfgr")).andExpect(status().isNotFound());
+    }
+
+    @Test
+    public void test_createVillainBadRequest() throws Exception {
+        when(villainServiceMock.createVillain(any())).thenThrow(APIException.class);
+
+        mvc.perform(post("/villain").contentType(MediaType.APPLICATION_JSON)
+                .content(objMapper.writeValueAsString(apiVillain))).andExpect(status().isBadRequest());
+    }
+
+    @Test
+    public void test_updateVillainNotFound() throws Exception {
+        when(villainServiceMock.updateVillain(anyString(), any())).thenThrow(ResourceNotFoundException.class);
+
+        mvc.perform(put("/villain/1").contentType(MediaType.APPLICATION_JSON)
+                .content(objMapper.writeValueAsString(apiVillain))).andExpect(status().isNotFound());
     }
 }
