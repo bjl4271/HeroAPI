@@ -57,8 +57,8 @@ public class HeroAPIControllerTest {
 
         when(heroServiceMock.createHero(any())).thenReturn(hero);
 
-        mvc.perform(post("/hero").contentType(MediaType.APPLICATION_JSON)
-                .content(objMapper.writeValueAsString(apiHero)))
+        mvc.perform(
+                post("/hero").contentType(MediaType.APPLICATION_JSON).content(objMapper.writeValueAsString(apiHero)))
                 .andExpect(status().isOk()).andExpect(jsonPath("$.data.heroName", equalTo(hero.getHeroName())))
                 .andExpect(jsonPath("$.data.powers", equalTo(hero.getPowers())))
                 .andExpect(jsonPath("$.data.weaknesses", equalTo(hero.getWeaknesses())))
