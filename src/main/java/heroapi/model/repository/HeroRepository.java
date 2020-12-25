@@ -8,6 +8,6 @@ import heroapi.model.db.Hero;
 
 public interface HeroRepository extends CrudRepository<Hero, Long> {
 
-	List<Hero> findByName(String name);
+	Hero findByName(String name);
 	List<Hero> findByRealIdentity(String real_identity);
 }

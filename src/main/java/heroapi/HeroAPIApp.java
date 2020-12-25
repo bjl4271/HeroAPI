@@ -14,28 +14,29 @@ import heroapi.model.repository.VillainRepository;
 
 @SpringBootApplication
 public class HeroAPIApp {
-	private static final Logger logger = LoggerFactory.getLogger(HeroAPIApp.class);
-	
+    private static final Logger logger = LoggerFactory.getLogger(HeroAPIApp.class);
+
     public static void main(String[] args) {
-    	SpringApplication.run(HeroAPIApp.class, args);
+        SpringApplication.run(HeroAPIApp.class, args);
     }
-    
+
     @Bean
     public CommandLineRunner populateHeroDB(HeroRepository heroRepository) {
-    	return (args) -> {
-    		logger.info("Inserting some Heroes to database...");
-    		heroRepository.save(new Hero("Batman", "Bruce Wayne", "Ace Detective, Martial Art skills", null));
-    		heroRepository.save(new Hero("Superman", "Clark Kent", "Super everything", "Kryptonite"));
-    		heroRepository.save(new Hero("Green Lantern", "Hal Jordan", "Green power ring", "Color yellow"));
-    	};
+        return (args) -> {
+            logger.info("Inserting some Heroes to database...");
+            heroRepository
+                    .save(new Hero("Batman", "Bruce Wayne", "Ace Detective, Martial Art skills", "not superhuman"));
+            heroRepository.save(new Hero("Superman", "Clark Kent", "Super everything", "Kryptonite"));
+            heroRepository.save(new Hero("Green Lantern", "Hal Jordan", "Green power ring", "Color yellow"));
+        };
     }
-    
+
     @Bean
     public CommandLineRunner populateVillainDB(VillainRepository villainRepository) {
-    	return (args) -> {
-    		logger.info("Inserting some Villains to database...");
-    		villainRepository.save(new Villain("Sinestro", "Thaal Sinestro", "Yellow power ring", "His Daughter"));
-    		villainRepository.save(new Villain("Joker", "Unknown", "Genius intellect", "Batman"));
-    	};
+        return (args) -> {
+            logger.info("Inserting some Villains to database...");
+            villainRepository.save(new Villain("Sinestro", "Thaal Sinestro", "Yellow power ring", "His Daughter"));
+            villainRepository.save(new Villain("Joker", "Unknown", "Genius intellect", "Batman"));
+        };
     }
 }

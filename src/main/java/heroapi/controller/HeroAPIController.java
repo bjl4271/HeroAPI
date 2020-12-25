@@ -44,8 +44,6 @@ public class HeroAPIController {
         return "Welcome to HeroAPI, please see ReadMe.md for details on using this API!";
     }
 
-    // TODO: add custom exception handler for controller exceptions
-
     // Hero API methods
 
     @GetMapping(value = "/hero", produces = "application/json")
@@ -55,6 +53,7 @@ public class HeroAPIController {
                 "Successfully retrieved heroes");
 
         logger.info("GET Hero Response:[status = {}, message = {}]", apiResponse.status_code, apiResponse.message);
+        
         return new ResponseEntity<>(apiResponse, HttpStatus.OK);
     }
 
@@ -62,15 +61,11 @@ public class HeroAPIController {
     public ResponseEntity<APIResponse<Hero>> createHero(@RequestBody APIHero hero) {
         APIResponse<Hero> apiResponse = null;
 
-        try {
-            Hero newHero = heroSerivce.createHero(hero);
-            apiResponse = new APIResponse<>(newHero, HttpStatus.OK.value(), "Successfully added hero to database");
-            logger.info("POST Hero Response:[status = {}, message = {}]", apiResponse.status_code, apiResponse.message);
-        } catch (APIException e) {
-            logger.error("Unable to create new Hero: {}", e.getMessage());
-            apiResponse = new APIResponse<>(null, HttpStatus.BAD_REQUEST.value(), e.getMessage());
-            return new ResponseEntity<>(apiResponse, HttpStatus.BAD_REQUEST);
-        }
+        Hero newHero = heroSerivce.createHero(hero);
+        apiResponse = new APIResponse<>(newHero, HttpStatus.OK.value(), "Successfully added hero to database");
+        
+        logger.info("POST Hero Response:[status = {}, message = {}]", apiResponse.status_code, apiResponse.message);
+        
         return new ResponseEntity<>(apiResponse, HttpStatus.OK);
     }
 
@@ -78,19 +73,11 @@ public class HeroAPIController {
     public ResponseEntity<APIResponse<Hero>> updateHero(@RequestBody APIHero hero, @PathVariable String heroId) {
         APIResponse<Hero> apiResponse = null;
 
-        try {
-            Hero updateHero = heroSerivce.updateHero(heroId, hero);
-            apiResponse = new APIResponse<>(updateHero, HttpStatus.OK.value(), "Successfully updated hero");
-            logger.info("PUT Hero Response:[status = {}, message = {}]", apiResponse.status_code, apiResponse.message);
-        } catch (APIException e) {
-            logger.error("Unable to update Hero: {}", e.getMessage());
-            apiResponse = new APIResponse<>(null, HttpStatus.BAD_REQUEST.value(), e.getMessage());
-            return new ResponseEntity<>(apiResponse, HttpStatus.BAD_REQUEST);
-        } catch (ResourceNotFoundException e) {
-            logger.error("Unable to update Hero: {}", e.getMessage());
-            apiResponse = new APIResponse<>(null, HttpStatus.NOT_FOUND.value(), e.getMessage());
-            return new ResponseEntity<>(apiResponse, HttpStatus.NOT_FOUND);
-        }
+        Hero updateHero = heroSerivce.updateHero(heroId, hero);
+        apiResponse = new APIResponse<>(updateHero, HttpStatus.OK.value(), "Successfully updated hero");
+        
+        logger.info("PUT Hero Response:[status = {}, message = {}]", apiResponse.status_code, apiResponse.message);
+        
         return new ResponseEntity<>(apiResponse, HttpStatus.OK);
     }
 
@@ -103,25 +90,21 @@ public class HeroAPIController {
                 HttpStatus.OK.value(), "Successfully retrieved villains");
 
         logger.info("GET Villain Response:[status = {}, message = {}]", apiResponse.status_code, apiResponse.message);
+        
         return new ResponseEntity<>(apiResponse, HttpStatus.OK);
     }
 
     @PostMapping(value = "/villain", consumes = "application/json")
     public ResponseEntity<APIResponse<Villain>> createVillain(@RequestBody APIVillain villain) {
         APIResponse<Villain> apiResponse = null;
+   
+        Villain newVillain = villainService.createVillain(villain);
+        apiResponse = new APIResponse<>(newVillain, HttpStatus.OK.value(),
+                "Successfully added villain to database");
 
-        try {
-            Villain newVillain = villainService.createVillain(villain);
-            apiResponse = new APIResponse<>(newVillain, HttpStatus.OK.value(),
-                    "Successfully added villain to database");
-
-            logger.info("POST Villain Response:[status = {}, message = {}]", apiResponse.status_code,
-                    apiResponse.message);
-        } catch (APIException e) {
-            logger.error("Unable to create new Villain: {}", e.getMessage());
-            apiResponse = new APIResponse<>(null, HttpStatus.BAD_REQUEST.value(), e.getMessage());
-            return new ResponseEntity<>(apiResponse, HttpStatus.BAD_REQUEST);
-        }
+        logger.info("POST Villain Response:[status = {}, message = {}]", apiResponse.status_code,
+                apiResponse.message);
+        
         return new ResponseEntity<>(apiResponse, HttpStatus.OK);
     }
 
@@ -130,18 +113,10 @@ public class HeroAPIController {
             @PathVariable String villainId) {
         APIResponse<Villain> apiResponse = null;
 
-        try {
-            Villain updateVillain = villainService.updateVillain(villainId, villain);
-            apiResponse = new APIResponse<>(updateVillain, HttpStatus.OK.value(), "Successfully updated Villain");
-        } catch (APIException e) {
-            logger.error("Unable to update Villain: {}", e.getMessage());
-            apiResponse = new APIResponse<>(null, HttpStatus.BAD_REQUEST.value(), e.getMessage());
-            return new ResponseEntity<>(apiResponse, HttpStatus.BAD_REQUEST);
-        } catch (ResourceNotFoundException e) {
-            logger.error("Unable to update Villain: {}", e.getMessage());
-            apiResponse = new APIResponse<>(null, HttpStatus.NOT_FOUND.value(), e.getMessage());
-            return new ResponseEntity<>(apiResponse, HttpStatus.NOT_FOUND);
-        }
+        Villain updateVillain = villainService.updateVillain(villainId, villain);
+        apiResponse = new APIResponse<>(updateVillain, HttpStatus.OK.value(), "Successfully updated Villain");
+        
+        logger.info("PUT Villain Response:[status = {}, message = {}]", apiResponse.status_code, apiResponse.message);
 
         return new ResponseEntity<>(apiResponse, HttpStatus.OK);
     }

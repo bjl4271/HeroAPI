@@ -41,9 +41,18 @@ public class HeroService {
             logger.info("Getting all heroes from database");
             heroRepo.findAll().forEach(heroList::add);
         } else {
-            logger.info("Getting all heroes by name '{}' from database", name);
-            heroList.addAll(heroRepo.findByName(name));
+            Hero hero = heroRepo.findByName(name);
+            
+            if(Objects.isNull(hero)) {
+                String message = String.format("Hero with name %s does not exist", name);
+                logger.error(message);
+                throw new ResourceNotFoundException(message);
+            }
+            
+            logger.info("Getting hero by name '{}' from database", name);
+            heroList.add(hero);
         }
+        
         return heroList;
     }
 
@@ -55,8 +64,9 @@ public class HeroService {
         Hero hero = heroRepo.findById(Long.valueOf(heroId)).orElse(null);
 
         if (Objects.isNull(hero)) {
-            logger.error("hero_id: {} not found in database", heroId);
-            throw new ResourceNotFoundException("Hero with id: " + heroId + " not found in database");
+            String message = String.format("Hero with id %s not found in database", heroId);
+            logger.error(message);
+            throw new ResourceNotFoundException(message);
         } else {
             hero.setHeroName(apiHero.hero_name);
             hero.setPowers(apiHero.powers);

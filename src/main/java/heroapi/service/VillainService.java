@@ -42,8 +42,16 @@ public class VillainService {
             logger.info("Getting all villains from database");
             villainRepo.findAll().forEach(villainList::add);
         } else {
-            logger.info("Getting all villains by name: {} from database", name);
-            villainList.addAll(villainRepo.findByName(name));
+            Villain villain = villainRepo.findByName(name);
+            
+            if(Objects.isNull(villain)) {
+                String message = String.format("Villain with name %s does not exist", name);
+                logger.error(message);
+                throw new ResourceNotFoundException(message);
+            }
+            
+            logger.info("Getting villain by name: {} from database", name);
+            villainList.add(villain);
         }
         return villainList;
     }
@@ -57,8 +65,9 @@ public class VillainService {
         Villain villain = villainRepo.findById(Long.valueOf(villainId)).orElse(null);
 
         if (Objects.isNull(villain)) {
-            logger.error("villain_id: {} not found in database", villainId);
-            throw new ResourceNotFoundException("Villain with id: " + villainId + " not found in database");
+            String message = String.format("Villain with id %s not found in database", villainId);
+            logger.error(message);
+            throw new ResourceNotFoundException(message);
         } else {
             villain.setVillainName(apiVillain.villain_name);
             villain.setPowers(apiVillain.powers);
