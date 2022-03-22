@@ -24,12 +24,16 @@ public class VillainService {
     private VillainRepository villainRepo;
 
     public APIVillain createVillain(APIVillain apiVillain) throws APIException {
-        if (Objects.nonNull(apiVillain.villain_id)) {
+        if (Objects.nonNull(apiVillain.getVillainId())) {
             throw new APIException("villain_id is auto-generated and cannot have a value");
         }
 
-        Villain villain = new Villain(apiVillain.villain_name, apiVillain.real_identity, apiVillain.powers,
-                apiVillain.weaknesses);
+        Villain villain = Villain.builder()
+                .name(apiVillain.getVillainName())
+                .weaknesses(apiVillain.getWeaknesses())
+                .realIdentity(apiVillain.getRealIdentity())
+                .powers(apiVillain.getPowers())
+                .build();
         villainRepo.save(villain);
         logger.info("Created new Villain: {} in database", villain.toString());
 
@@ -72,10 +76,10 @@ public class VillainService {
             logger.error(message);
             throw new ResourceNotFoundException(message);
         } else {
-            villain.setVillainName(apiVillain.villain_name);
-            villain.setPowers(apiVillain.powers);
-            villain.setWeaknesses(apiVillain.weaknesses);
-            villain.setRealIdentity(apiVillain.real_identity);
+            villain.setName(apiVillain.getVillainName());
+            villain.setPowers(apiVillain.getPowers());
+            villain.setWeaknesses(apiVillain.getWeaknesses());
+            villain.setRealIdentity(apiVillain.getRealIdentity());
             villainRepo.save(villain);
         }
 

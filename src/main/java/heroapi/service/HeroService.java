@@ -24,11 +24,16 @@ public class HeroService {
     private HeroRepository heroRepo;
 
     public APIHero createHero(APIHero apiHero) throws APIException {
-        if (Objects.nonNull(apiHero.hero_id)) {
+        if (Objects.nonNull(apiHero.getHeroId())) {
             throw new APIException("hero_id is auto-generated and cannot have a value");
         }
 
-        Hero hero = new Hero(apiHero.hero_name, apiHero.real_identity, apiHero.powers, apiHero.weaknesses);
+        Hero hero = Hero.builder()
+                .heroId(apiHero.getHeroId())
+                .realIdentity(apiHero.getRealIdentity())
+                .name(apiHero.getHeroName())
+                .powers(apiHero.getPowers())
+                .build();
         heroRepo.save(hero);
         logger.info("Created new hero: {} in database", hero.toString());
 
@@ -71,10 +76,10 @@ public class HeroService {
             logger.error(message);
             throw new ResourceNotFoundException(message);
         } else {
-            hero.setHeroName(apiHero.hero_name);
-            hero.setPowers(apiHero.powers);
-            hero.setWeaknesses(apiHero.weaknesses);
-            hero.setRealIdentity(apiHero.real_identity);
+            hero.setWeaknesses(apiHero.getWeaknesses());
+            hero.setPowers(apiHero.getPowers());
+            hero.setName(apiHero.getHeroName());
+            hero.setRealIdentity(apiHero.getRealIdentity());
             heroRepo.save(hero);
         }
 

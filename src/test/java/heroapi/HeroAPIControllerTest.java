@@ -49,14 +49,14 @@ public class HeroAPIControllerTest {
 
     private void setupTestData() {
         apiHero = new HashMap<>();
-        apiHero.put("hero_name", "Superman");
-        apiHero.put("real_identity", "Clark Kent");
+        apiHero.put("heroName", "Superman");
+        apiHero.put("realIdentity", "Clark Kent");
         apiHero.put("powers", "Super everything");
         apiHero.put("weaknesses", "Kryptonite");
 
         apiVillain = new HashMap<>();
-        apiVillain.put("villain_name", "Captain Cold");
-        apiVillain.put("real_identity", "Leonard Snart");
+        apiVillain.put("villainName", "Captain Cold");
+        apiVillain.put("realIdentity", "Leonard Snart");
         apiVillain.put("powers", "Ice Control, Weapon Master");
         apiVillain.put("weaknesses", "Human");
     }
@@ -76,10 +76,10 @@ public class HeroAPIControllerTest {
 
         mvc.perform(
                 post("/hero").contentType(MediaType.APPLICATION_JSON).content(objMapper.writeValueAsString(apiHero)))
-                .andExpect(status().isOk()).andExpect(jsonPath("$.data.hero_name", equalTo(hero.hero_name)))
-                .andExpect(jsonPath("$.data.powers", equalTo(hero.powers)))
-                .andExpect(jsonPath("$.data.weaknesses", equalTo(hero.weaknesses)))
-                .andExpect(jsonPath("$.data.real_identity", equalTo(hero.real_identity)));
+                .andExpect(status().isOk()).andExpect(jsonPath("$.data.heroName", equalTo(hero.getHeroName())))
+                .andExpect(jsonPath("$.data.powers", equalTo(hero.getPowers())))
+                .andExpect(jsonPath("$.data.weaknesses", equalTo(hero.getWeaknesses())))
+                .andExpect(jsonPath("$.data.realIdentity", equalTo(hero.getRealIdentity())));
     }
 
     @Test
@@ -90,10 +90,10 @@ public class HeroAPIControllerTest {
 
         mvc.perform(
                 put("/hero/1").contentType(MediaType.APPLICATION_JSON).content(objMapper.writeValueAsString(apiHero)))
-                .andExpect(status().isOk()).andExpect(jsonPath("$.data.hero_name", equalTo(hero.hero_name)))
-                .andExpect(jsonPath("$.data.powers", equalTo(hero.powers)))
-                .andExpect(jsonPath("$.data.weaknesses", equalTo(hero.weaknesses)))
-                .andExpect(jsonPath("$.data.real_identity", equalTo(hero.real_identity)));
+                .andExpect(status().isOk()).andExpect(jsonPath("$.data.heroName", equalTo(hero.getHeroName())))
+                .andExpect(jsonPath("$.data.powers", equalTo(hero.getPowers())))
+                .andExpect(jsonPath("$.data.weaknesses", equalTo(hero.getWeaknesses())))
+                .andExpect(jsonPath("$.data.realIdentity", equalTo(hero.getRealIdentity())));
     }
 
     @Test
@@ -103,10 +103,10 @@ public class HeroAPIControllerTest {
         when(heroServiceMock.getHero("Superman")).thenReturn(List.of(hero));
 
         mvc.perform(get("/hero?name=Superman")).andExpect(status().isOk())
-                .andExpect(jsonPath("$.data[0].hero_name", equalTo(hero.hero_name)))
-                .andExpect(jsonPath("$.data[0].powers", equalTo(hero.powers)))
-                .andExpect(jsonPath("$.data[0].weaknesses", equalTo(hero.weaknesses)))
-                .andExpect(jsonPath("$.data[0].real_identity", equalTo(hero.real_identity)));
+                .andExpect(jsonPath("$.data[0].heroName", equalTo(hero.getHeroName())))
+                .andExpect(jsonPath("$.data[0].powers", equalTo(hero.getPowers())))
+                .andExpect(jsonPath("$.data[0].weaknesses", equalTo(hero.getWeaknesses())))
+                .andExpect(jsonPath("$.data[0].realIdentity", equalTo(hero.getRealIdentity())));
     }
 
     @Test
@@ -153,10 +153,10 @@ public class HeroAPIControllerTest {
 
         mvc.perform(post("/villain").contentType(MediaType.APPLICATION_JSON)
                 .content(objMapper.writeValueAsString(apiVillain))).andExpect(status().isOk())
-                .andExpect(jsonPath("$.data.villain_name", equalTo(villain.villain_name)))
-                .andExpect(jsonPath("$.data.powers", equalTo(villain.powers)))
-                .andExpect(jsonPath("$.data.weaknesses", equalTo(villain.weaknesses)))
-                .andExpect(jsonPath("$.data.real_identity", equalTo(villain.real_identity)));
+                .andExpect(jsonPath("$.data.villainName", equalTo(villain.getVillainName())))
+                .andExpect(jsonPath("$.data.powers", equalTo(villain.getPowers())))
+                .andExpect(jsonPath("$.data.weaknesses", equalTo(villain.getWeaknesses())))
+                .andExpect(jsonPath("$.data.realIdentity", equalTo(villain.getRealIdentity())));
     }
 
     @Test
@@ -167,10 +167,10 @@ public class HeroAPIControllerTest {
 
         mvc.perform(put("/villain/1").contentType(MediaType.APPLICATION_JSON)
                 .content(objMapper.writeValueAsString(apiVillain))).andExpect(status().isOk())
-                .andExpect(jsonPath("$.data.villain_name", equalTo(villain.villain_name)))
-                .andExpect(jsonPath("$.data.powers", equalTo(villain.powers)))
-                .andExpect(jsonPath("$.data.weaknesses", equalTo(villain.weaknesses)))
-                .andExpect(jsonPath("$.data.real_identity", equalTo(villain.real_identity)));
+                .andExpect(jsonPath("$.data.villainName", equalTo(villain.getVillainName())))
+                .andExpect(jsonPath("$.data.powers", equalTo(villain.getPowers())))
+                .andExpect(jsonPath("$.data.weaknesses", equalTo(villain.getWeaknesses())))
+                .andExpect(jsonPath("$.data.realIdentity", equalTo(villain.getRealIdentity())));
     }
 
     @Test
@@ -180,10 +180,10 @@ public class HeroAPIControllerTest {
         when(villainServiceMock.getVillain("Captain Cold")).thenReturn(List.of(villain));
 
         mvc.perform(get("/villain?name=Captain Cold")).andExpect(status().isOk())
-                .andExpect(jsonPath("$.data[0].villain_name", equalTo(villain.villain_name)))
-                .andExpect(jsonPath("$.data[0].powers", equalTo(villain.powers)))
-                .andExpect(jsonPath("$.data[0].weaknesses", equalTo(villain.weaknesses)))
-                .andExpect(jsonPath("$.data[0].real_identity", equalTo(villain.real_identity)));
+                .andExpect(jsonPath("$.data[0].villainName", equalTo(villain.getVillainName())))
+                .andExpect(jsonPath("$.data[0].powers", equalTo(villain.getPowers())))
+                .andExpect(jsonPath("$.data[0].weaknesses", equalTo(villain.getWeaknesses())))
+                .andExpect(jsonPath("$.data[0].realIdentity", equalTo(villain.getRealIdentity())));
     }
 
     @Test
