@@ -1,14 +1,14 @@
 package heroapi;
 
-import static org.hamcrest.Matchers.*;
-import static org.mockito.Mockito.*;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
-
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
+import com.fasterxml.jackson.databind.ObjectMapper;
+import heroapi.controller.HeroAPIController;
+import heroapi.exception.APIException;
+import heroapi.exception.ResourceNotFoundException;
+import heroapi.exception.RestExceptionHandler;
+import heroapi.model.api.APIHero;
+import heroapi.model.api.APIVillain;
+import heroapi.service.HeroService;
+import heroapi.service.VillainService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
@@ -17,18 +17,15 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
-import heroapi.controller.HeroAPIController;
-import heroapi.exception.APIException;
-import heroapi.exception.ResourceNotFoundException;
-import heroapi.exception.RestExceptionHandler;
-import heroapi.model.api.APIHero;
-import heroapi.model.api.APIVillain;
-import heroapi.model.db.Hero;
-import heroapi.model.db.Villain;
-import heroapi.service.HeroService;
-import heroapi.service.VillainService;
+import static org.hamcrest.Matchers.*;
+import static org.mockito.Mockito.any;
+import static org.mockito.Mockito.*;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @TestInstance(Lifecycle.PER_CLASS)
 public class HeroAPIControllerTest {
