@@ -4,6 +4,9 @@
 # Ignore Gradle build output directory
 build
 
+# IntelliJ ignores
+.idea
+
 # eclipse specific git ignore
 .project
 .metadata
