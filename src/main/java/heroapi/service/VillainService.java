@@ -35,7 +35,7 @@ public class VillainService {
                 .powers(apiVillain.getPowers())
                 .build();
         villainRepo.save(villain);
-        logger.info("Created new Villain: {} in database", villain.toString());
+        logger.info("Created new Villain: {} in database", villain);
 
         return APIMapper.convertVillainToAPIVillain(villain);
     }
@@ -49,11 +49,11 @@ public class VillainService {
                 villainList.add(APIMapper.convertVillainToAPIVillain(villain));
             });
         } else {
-            Villain villain = villainRepo.findByName(name);
+            Villain villain = villainRepo.findByNameIgnoreCase(name);
             
             if(Objects.isNull(villain)) {
                 String message = String.format("Villain with name %s does not exist", name);
-                logger.error(message);
+                logger.info(message);
                 throw new ResourceNotFoundException(message);
             }
             
@@ -73,7 +73,7 @@ public class VillainService {
 
         if (Objects.isNull(villain)) {
             String message = String.format("Villain with id %s not found in database", villainId);
-            logger.error(message);
+            logger.info(message);
             throw new ResourceNotFoundException(message);
         } else {
             villain.setName(apiVillain.getVillainName());

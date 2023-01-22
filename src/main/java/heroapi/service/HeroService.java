@@ -35,7 +35,7 @@ public class HeroService {
                 .powers(apiHero.getPowers())
                 .build();
         heroRepo.save(hero);
-        logger.info("Created new hero: {} in database", hero.toString());
+        logger.info("Created new hero: {} in database", hero);
 
         return APIMapper.convertHeroToAPIHero(hero);
     }
@@ -49,11 +49,11 @@ public class HeroService {
                 heroList.add(APIMapper.convertHeroToAPIHero(hero));
             });
         } else {
-            Hero hero = heroRepo.findByName(name);
+            Hero hero = heroRepo.findByNameIgnoreCase(name);
             
             if(Objects.isNull(hero)) {
                 String message = String.format("Hero with name %s does not exist", name);
-                logger.error(message);
+                logger.info(message);
                 throw new ResourceNotFoundException(message);
             }
             
@@ -73,7 +73,7 @@ public class HeroService {
 
         if (Objects.isNull(hero)) {
             String message = String.format("Hero with id %s not found in database", heroId);
-            logger.error(message);
+            logger.info(message);
             throw new ResourceNotFoundException(message);
         } else {
             hero.setWeaknesses(apiHero.getWeaknesses());

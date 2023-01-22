@@ -8,6 +8,6 @@ import heroapi.model.db.Villain;
 
 public interface VillainRepository extends CrudRepository<Villain, Long> {
 
-	Villain findByName(String name);
+	Villain findByNameIgnoreCase(String name);
 	List<Villain> findByRealIdentity(String real_identity);
 }

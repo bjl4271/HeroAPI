@@ -9,11 +9,11 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 public class RestExceptionHandler {
     @ExceptionHandler(value = {APIException.class})
     public ResponseEntity<Object> handleAPIException(APIException ex) {
-        return new ResponseEntity<Object>(ex.getMessage(), HttpStatus.BAD_REQUEST);
+        return new ResponseEntity<>(ex.getMessage(), HttpStatus.BAD_REQUEST);
     }
     
     @ExceptionHandler(value = {ResourceNotFoundException.class})
     public ResponseEntity<Object> handleNotFoundException(ResourceNotFoundException ex) {
-        return new ResponseEntity<Object>(ex.getMessage(), HttpStatus.NOT_FOUND);
+        return new ResponseEntity<>(ex.getMessage(), HttpStatus.NOT_FOUND);
     }
 }
