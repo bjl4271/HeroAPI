@@ -1,7 +1,7 @@
 ## HeroAPI
 
 A simple spring boot rest service to get and create Heroes and Villains (JDK 11+ required).
-It uses H2 (in-memory) database to store information. This is a demo project not to be used for production purposes.
+It uses H2 (in-memory) database to store information. This is a demo project.
 <br/><br/>
 build project: `.\gradlew build`
 <br/>
