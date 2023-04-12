@@ -50,7 +50,7 @@ public class HeroAPIController {
         APIResponse<List<APIHero>> apiResponse = new APIResponse<>(heroSerivce.getHero(name), HttpStatus.OK.value(),
                 "Successfully retrieved heroes");
 
-        logger.info("GET Hero Response:[status = {}, message = {}]", apiResponse.status_code, apiResponse.message);
+        logger.info("GET Hero Response:[status = {}, message = {}]", apiResponse.getStatusCode(), apiResponse.getMessage());
         
         return new ResponseEntity<>(apiResponse, HttpStatus.OK);
     }
@@ -62,7 +62,7 @@ public class HeroAPIController {
         APIHero newHero = heroSerivce.createHero(hero);
         apiResponse = new APIResponse<>(newHero, HttpStatus.OK.value(), "Successfully added hero to database");
         
-        logger.info("POST Hero Response:[status = {}, message = {}]", apiResponse.status_code, apiResponse.message);
+        logger.info("POST Hero Response:[status = {}, message = {}]", apiResponse.getStatusCode(), apiResponse.getMessage());
         
         return new ResponseEntity<>(apiResponse, HttpStatus.OK);
     }
@@ -74,7 +74,7 @@ public class HeroAPIController {
         APIHero updateHero = heroSerivce.updateHero(heroId, hero);
         apiResponse = new APIResponse<>(updateHero, HttpStatus.OK.value(), "Successfully updated hero");
         
-        logger.info("PUT Hero Response:[status = {}, message = {}]", apiResponse.status_code, apiResponse.message);
+        logger.info("PUT Hero Response:[status = {}, message = {}]", apiResponse.getStatusCode(), apiResponse.getMessage());
         
         return new ResponseEntity<>(apiResponse, HttpStatus.OK);
     }
@@ -87,7 +87,7 @@ public class HeroAPIController {
         APIResponse<List<APIVillain>> apiResponse = new APIResponse<>(villainService.getVillain(name),
                 HttpStatus.OK.value(), "Successfully retrieved villains");
 
-        logger.info("GET Villain Response:[status = {}, message = {}]", apiResponse.status_code, apiResponse.message);
+        logger.info("GET Villain Response:[status = {}, message = {}]", apiResponse.getStatusCode(), apiResponse.getMessage());
         
         return new ResponseEntity<>(apiResponse, HttpStatus.OK);
     }
@@ -100,8 +100,7 @@ public class HeroAPIController {
         apiResponse = new APIResponse<>(newVillain, HttpStatus.OK.value(),
                 "Successfully added villain to database");
 
-        logger.info("POST Villain Response:[status = {}, message = {}]", apiResponse.status_code,
-                apiResponse.message);
+        logger.info("POST Villain Response:[status = {}, message = {}]", apiResponse.getStatusCode(), apiResponse.getMessage());
         
         return new ResponseEntity<>(apiResponse, HttpStatus.OK);
     }
@@ -114,7 +113,7 @@ public class HeroAPIController {
         APIVillain updateVillain = villainService.updateVillain(villainId, villain);
         apiResponse = new APIResponse<>(updateVillain, HttpStatus.OK.value(), "Successfully updated Villain");
         
-        logger.info("PUT Villain Response:[status = {}, message = {}]", apiResponse.status_code, apiResponse.message);
+        logger.info("PUT Villain Response:[status = {}, message = {}]", apiResponse.getStatusCode(), apiResponse.getMessage());
 
         return new ResponseEntity<>(apiResponse, HttpStatus.OK);
     }

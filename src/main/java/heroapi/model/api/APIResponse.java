@@ -1,17 +1,15 @@
 package heroapi.model.api;
 
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
 public class APIResponse<T> {
-
-    public T data;
-    public int status_code;
-    public String message;
-
-    public APIResponse() {
-    }
-
-    public APIResponse(T data, int status_code, String message) {
-        this.data = data;
-        this.status_code = status_code;
-        this.message = message;
-    }
+    private T data;
+    private int statusCode;
+    private String message;
 }
