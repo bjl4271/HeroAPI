@@ -19,9 +19,12 @@ import heroapi.util.APIMapper;
 @Service
 public class VillainService {
     private static final Logger logger = LoggerFactory.getLogger(VillainService.class);
+    private VillainRepository villainRepo;
 
     @Autowired
-    private VillainRepository villainRepo;
+    public VillainService(VillainRepository villainRepo) {
+        this.villainRepo = villainRepo;
+    }
 
     public APIVillain createVillain(APIVillain apiVillain) throws APIException {
         if (Objects.nonNull(apiVillain.getVillainId())) {
