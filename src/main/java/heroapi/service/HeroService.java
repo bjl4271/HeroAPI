@@ -4,8 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
-import org.slf4j.LoggerFactory;
-import org.slf4j.Logger;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -16,9 +15,9 @@ import heroapi.model.db.Hero;
 import heroapi.model.repository.HeroRepository;
 import heroapi.util.APIMapper;
 
+@Slf4j
 @Service
 public class HeroService {
-    private static final Logger logger = LoggerFactory.getLogger(HeroService.class);
     private HeroRepository heroRepo;
 
     @Autowired
@@ -38,7 +37,7 @@ public class HeroService {
                 .powers(apiHero.getPowers())
                 .build();
         heroRepo.save(hero);
-        logger.info("Created new hero: {} in database", hero);
+        log.info("Created new hero: {} in database", hero);
 
         return APIMapper.convertHeroToAPIHero(hero);
     }
@@ -47,7 +46,7 @@ public class HeroService {
         List<APIHero> heroList = new ArrayList<>();
 
         if (Objects.isNull(name) || name.isBlank()) {
-            logger.info("Getting all heroes from database");
+            log.info("Getting all heroes from database");
             heroRepo.findAll().forEach((hero) -> {
                 heroList.add(APIMapper.convertHeroToAPIHero(hero));
             });
@@ -56,11 +55,11 @@ public class HeroService {
             
             if(Objects.isNull(hero)) {
                 String message = String.format("Hero with name %s does not exist", name);
-                logger.info(message);
+                log.info(message);
                 throw new ResourceNotFoundException(message);
             }
             
-            logger.info("Getting hero by name '{}' from database", name);
+            log.info("Getting hero by name '{}' from database", name);
             heroList.add(APIMapper.convertHeroToAPIHero(hero));
         }
         
@@ -76,7 +75,7 @@ public class HeroService {
 
         if (Objects.isNull(hero)) {
             String message = String.format("Hero with id %s not found in database", heroId);
-            logger.info(message);
+            log.info(message);
             throw new ResourceNotFoundException(message);
         } else {
             hero.setWeaknesses(apiHero.getWeaknesses());

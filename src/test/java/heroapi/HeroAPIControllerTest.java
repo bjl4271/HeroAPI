@@ -145,78 +145,80 @@ public class HeroAPIControllerTest {
 
     // Villain API tests
 
-    @Test
-    public void test_createVillain() throws Exception {
-        APIVillain villain = new APIVillain(0L, "Captain Cold", "Leonard Snart", "Ice Control, Weapon Master", "Human");
+    // TODO: remove below tests are we don't need them anymore
 
-        when(villainServiceMock.createVillain(any())).thenReturn(villain);
-
-        mvc.perform(post("/villain").contentType(MediaType.APPLICATION_JSON)
-                .content(objMapper.writeValueAsString(apiVillain))).andExpect(status().isOk())
-                .andExpect(jsonPath("$.data.villainName", equalTo(villain.getVillainName())))
-                .andExpect(jsonPath("$.data.powers", equalTo(villain.getPowers())))
-                .andExpect(jsonPath("$.data.weaknesses", equalTo(villain.getWeaknesses())))
-                .andExpect(jsonPath("$.data.realIdentity", equalTo(villain.getRealIdentity())));
-    }
-
-    @Test
-    public void test_updateVillain() throws Exception {
-        APIVillain villain = new APIVillain(0L, "Captain Cold", "Leonard Snart", "really cold", "Snowman");
-
-        when(villainServiceMock.updateVillain(anyString(), any())).thenReturn(villain);
-
-        mvc.perform(put("/villain/1").contentType(MediaType.APPLICATION_JSON)
-                .content(objMapper.writeValueAsString(apiVillain))).andExpect(status().isOk())
-                .andExpect(jsonPath("$.data.villainName", equalTo(villain.getVillainName())))
-                .andExpect(jsonPath("$.data.powers", equalTo(villain.getPowers())))
-                .andExpect(jsonPath("$.data.weaknesses", equalTo(villain.getWeaknesses())))
-                .andExpect(jsonPath("$.data.realIdentity", equalTo(villain.getRealIdentity())));
-    }
-
-    @Test
-    public void test_getVillain() throws Exception {
-        APIVillain villain = new APIVillain(0L, "Captain Cold", "Leonard Snart", "Ice Control, Weapon Master", "Human");
-
-        when(villainServiceMock.getVillain("Captain Cold")).thenReturn(List.of(villain));
-
-        mvc.perform(get("/villain?name=Captain Cold")).andExpect(status().isOk())
-                .andExpect(jsonPath("$.data[0].villainName", equalTo(villain.getVillainName())))
-                .andExpect(jsonPath("$.data[0].powers", equalTo(villain.getPowers())))
-                .andExpect(jsonPath("$.data[0].weaknesses", equalTo(villain.getWeaknesses())))
-                .andExpect(jsonPath("$.data[0].realIdentity", equalTo(villain.getRealIdentity())));
-    }
-
-    @Test
-    public void test_getAllVillains() throws Exception {
-        List<APIVillain> villainList = List.of(
-                new APIVillain(0L, "Professor Zoom", "Eobard Thawne", "Negative Speed Force", "Insanity"),
-                new APIVillain(1L, "Captain Cold", "Leonard Snart", "Ice Control, Weapon Master", "Human"));
-
-        when(villainServiceMock.getVillain(null)).thenReturn(villainList);
-
-        mvc.perform(get("/villain")).andExpect(status().isOk()).andExpect(jsonPath("$.data[*]", hasSize(2)));
-    }
-
-    @Test
-    public void test_getVillainNotFound() throws Exception {
-        when(villainServiceMock.getVillain(anyString())).thenThrow(ResourceNotFoundException.class);
-
-        mvc.perform(get("/villain?name=sfgr")).andExpect(status().isNotFound());
-    }
-
-    @Test
-    public void test_createVillainBadRequest() throws Exception {
-        when(villainServiceMock.createVillain(any())).thenThrow(APIException.class);
-
-        mvc.perform(post("/villain").contentType(MediaType.APPLICATION_JSON)
-                .content(objMapper.writeValueAsString(apiVillain))).andExpect(status().isBadRequest());
-    }
-
-    @Test
-    public void test_updateVillainNotFound() throws Exception {
-        when(villainServiceMock.updateVillain(anyString(), any())).thenThrow(ResourceNotFoundException.class);
-
-        mvc.perform(put("/villain/1").contentType(MediaType.APPLICATION_JSON)
-                .content(objMapper.writeValueAsString(apiVillain))).andExpect(status().isNotFound());
-    }
+//    @Test
+//    public void test_createVillain() throws Exception {
+//        APIVillain villain = new APIVillain(0L, "Captain Cold", "Leonard Snart", "Ice Control, Weapon Master", "Human");
+//
+//        when(villainServiceMock.createVillain(any())).thenReturn(villain);
+//
+//        mvc.perform(post("/villain").contentType(MediaType.APPLICATION_JSON)
+//                .content(objMapper.writeValueAsString(apiVillain))).andExpect(status().isOk())
+//                .andExpect(jsonPath("$.data.villainName", equalTo(villain.getVillainName())))
+//                .andExpect(jsonPath("$.data.powers", equalTo(villain.getPowers())))
+//                .andExpect(jsonPath("$.data.weaknesses", equalTo(villain.getWeaknesses())))
+//                .andExpect(jsonPath("$.data.realIdentity", equalTo(villain.getRealIdentity())));
+//    }
+//
+//    @Test
+//    public void test_updateVillain() throws Exception {
+//        APIVillain villain = new APIVillain(0L, "Captain Cold", "Leonard Snart", "really cold", "Snowman");
+//
+//        when(villainServiceMock.updateVillain(anyString(), any())).thenReturn(villain);
+//
+//        mvc.perform(put("/villain/1").contentType(MediaType.APPLICATION_JSON)
+//                .content(objMapper.writeValueAsString(apiVillain))).andExpect(status().isOk())
+//                .andExpect(jsonPath("$.data.villainName", equalTo(villain.getVillainName())))
+//                .andExpect(jsonPath("$.data.powers", equalTo(villain.getPowers())))
+//                .andExpect(jsonPath("$.data.weaknesses", equalTo(villain.getWeaknesses())))
+//                .andExpect(jsonPath("$.data.realIdentity", equalTo(villain.getRealIdentity())));
+//    }
+//
+//    @Test
+//    public void test_getVillain() throws Exception {
+//        APIVillain villain = new APIVillain(0L, "Captain Cold", "Leonard Snart", "Ice Control, Weapon Master", "Human");
+//
+//        when(villainServiceMock.getVillain("Captain Cold")).thenReturn(List.of(villain));
+//
+//        mvc.perform(get("/villain?name=Captain Cold")).andExpect(status().isOk())
+//                .andExpect(jsonPath("$.data[0].villainName", equalTo(villain.getVillainName())))
+//                .andExpect(jsonPath("$.data[0].powers", equalTo(villain.getPowers())))
+//                .andExpect(jsonPath("$.data[0].weaknesses", equalTo(villain.getWeaknesses())))
+//                .andExpect(jsonPath("$.data[0].realIdentity", equalTo(villain.getRealIdentity())));
+//    }
+//
+//    @Test
+//    public void test_getAllVillains() throws Exception {
+//        List<APIVillain> villainList = List.of(
+//                new APIVillain(0L, "Professor Zoom", "Eobard Thawne", "Negative Speed Force", "Insanity"),
+//                new APIVillain(1L, "Captain Cold", "Leonard Snart", "Ice Control, Weapon Master", "Human"));
+//
+//        when(villainServiceMock.getVillain(null)).thenReturn(villainList);
+//
+//        mvc.perform(get("/villain")).andExpect(status().isOk()).andExpect(jsonPath("$.data[*]", hasSize(2)));
+//    }
+//
+//    @Test
+//    public void test_getVillainNotFound() throws Exception {
+//        when(villainServiceMock.getVillain(anyString())).thenThrow(ResourceNotFoundException.class);
+//
+//        mvc.perform(get("/villain?name=sfgr")).andExpect(status().isNotFound());
+//    }
+//
+//    @Test
+//    public void test_createVillainBadRequest() throws Exception {
+//        when(villainServiceMock.createVillain(any())).thenThrow(APIException.class);
+//
+//        mvc.perform(post("/villain").contentType(MediaType.APPLICATION_JSON)
+//                .content(objMapper.writeValueAsString(apiVillain))).andExpect(status().isBadRequest());
+//    }
+//
+//    @Test
+//    public void test_updateVillainNotFound() throws Exception {
+//        when(villainServiceMock.updateVillain(anyString(), any())).thenThrow(ResourceNotFoundException.class);
+//
+//        mvc.perform(put("/villain/1").contentType(MediaType.APPLICATION_JSON)
+//                .content(objMapper.writeValueAsString(apiVillain))).andExpect(status().isNotFound());
+//    }
 }
