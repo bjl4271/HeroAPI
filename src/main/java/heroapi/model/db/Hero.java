@@ -2,11 +2,7 @@ package heroapi.model.db;
 
 import lombok.*;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 
 @Getter
 @Setter
@@ -29,6 +25,10 @@ public class Hero {
 	private String realIdentity;
 	@Column(name="hero_type")
 	private HeroType heroType;
+
+	@ManyToOne
+	@JoinColumn(name="team_affiliation_id")
+	private TeamAffiliation teamAffiliation;
 	
 	@Override
 	public String toString() {
