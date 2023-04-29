@@ -27,6 +27,8 @@ public class Hero {
 	private String weaknesses;
 	@Column(name="real_identity")
 	private String realIdentity;
+	@Column(name="hero_type")
+	private HeroType heroType;
 	
 	@Override
 	public String toString() {
