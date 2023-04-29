@@ -21,4 +21,9 @@ public class TeamAffiliation {
 
     @OneToMany(mappedBy = "teamAffiliation")
     private Set<Hero> heroes;
+
+    @Override
+    public String toString() {
+        return String.format("Team Affiliation: %s, No. of Members: %s", teamName, heroes.size());
+    }
 }
