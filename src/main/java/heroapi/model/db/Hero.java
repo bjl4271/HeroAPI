@@ -32,6 +32,7 @@ public class Hero {
 	
 	@Override
 	public String toString() {
-		return String.format("Hero: %s, powers: %s, weaknesses: %s", name, powers, weaknesses);
+		return String.format("Hero: %s, type: %s, team: %s, powers: %s, weaknesses: %s",
+				name, heroType, teamAffiliation, powers, weaknesses);
 	}
 }
