@@ -15,6 +15,7 @@ public class APIMapper {
                 .powers(heroObj.getPowers())
                 .realIdentity(heroObj.getRealIdentity())
                 .weaknesses(heroObj.getWeaknesses())
+                .teamAffiliation(heroObj.getTeamAffiliation().getTeamName())
                 .build();
     }
     

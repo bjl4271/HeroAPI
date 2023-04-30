@@ -53,6 +53,7 @@ public class HeroAPIControllerTest {
         apiHero.put("realIdentity", "Clark Kent");
         apiHero.put("powers", "Super everything");
         apiHero.put("weaknesses", "Kryptonite");
+        apiHero.put("teamAffiliation", "Justice League");
 
         apiVillain = new HashMap<>();
         apiVillain.put("villainName", "Captain Cold");
@@ -70,7 +71,7 @@ public class HeroAPIControllerTest {
 
     @Test
     public void test_createHero() throws Exception {
-        APIHero hero = new APIHero(0L, "Superman", "Clark Kent", "Super everything", "Kryptonite");
+        APIHero hero = new APIHero(0L, "Superman", "Clark Kent", "Super everything", "Kryptonite", "Justice League");
 
         when(heroServiceMock.createHero(any())).thenReturn(hero);
 
@@ -84,7 +85,7 @@ public class HeroAPIControllerTest {
 
     @Test
     public void test_updateHero() throws Exception {
-        APIHero hero = new APIHero(0L, "Superman", "Clark Kent", "Man of Steel", "Kryptonite");
+        APIHero hero = new APIHero(0L, "Superman", "Clark Kent", "Man of Steel", "Kryptonite", "Justice League");
 
         when(heroServiceMock.updateHero(anyString(), any())).thenReturn(hero);
 
@@ -98,7 +99,7 @@ public class HeroAPIControllerTest {
 
     @Test
     public void test_getHero() throws Exception {
-        APIHero hero = new APIHero(0L, "Superman", "Clark Kent", "Super everything", "Kryptonite");
+        APIHero hero = new APIHero(0L, "Superman", "Clark Kent", "Super everything", "Kryptonite", "Justice League");
 
         when(heroServiceMock.getHero("Superman")).thenReturn(List.of(hero));
 
@@ -111,8 +112,9 @@ public class HeroAPIControllerTest {
 
     @Test
     public void test_getAllHeroes() throws Exception {
-        List<APIHero> heroList = List.of(new APIHero(0L, "Superman", "Clark Kent", "Super everything", "Kryptonite"),
-                new APIHero(1L, "Batman", "Bruce Wayne", "Ace Detective", "None"));
+        List<APIHero> heroList = List.of(
+                new APIHero(0L, "Superman", "Clark Kent", "Super everything", "Kryptonite", "Justice League"),
+                new APIHero(1L, "Batman", "Bruce Wayne", "Ace Detective", "Normal Human", "Justice League"));
 
         when(heroServiceMock.getHero(null)).thenReturn(heroList);
 
