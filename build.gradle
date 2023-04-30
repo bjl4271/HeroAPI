@@ -21,6 +21,9 @@ dependencies {
       exclude group: 'org.junit.vintage', module: 'junit-vintage-engine'
     }
 
+    // https://mvnrepository.com/artifact/org.apache.commons/commons-lang3
+    implementation group: 'org.apache.commons', name: 'commons-lang3', version: '3.12.0'
+
     compileOnly 'org.projectlombok:lombok:1.18.22'
     annotationProcessor 'org.projectlombok:lombok:1.18.22'
 

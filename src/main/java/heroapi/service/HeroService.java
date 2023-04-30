@@ -4,7 +4,10 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
+import heroapi.model.db.TeamAffiliation;
+import heroapi.model.repository.TeamAfilliationRepository;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -19,10 +22,12 @@ import heroapi.util.APIMapper;
 @Service
 public class HeroService {
     private HeroRepository heroRepo;
+    private TeamAfilliationRepository teamRepo;
 
     @Autowired
-    public HeroService(HeroRepository heroRepo) {
+    public HeroService(HeroRepository heroRepo, TeamAfilliationRepository teamRepo) {
         this.heroRepo = heroRepo;
+        this.teamRepo = teamRepo;
     }
 
     public APIHero createHero(APIHero apiHero) throws APIException {
@@ -35,6 +40,7 @@ public class HeroService {
                 .realIdentity(apiHero.getRealIdentity())
                 .name(apiHero.getHeroName())
                 .powers(apiHero.getPowers())
+                .teamAffiliation(getTeamByName(apiHero.getTeamAffiliation()))
                 .build();
         heroRepo.save(hero);
         log.info("Created new hero: {} in database", hero);
@@ -74,7 +80,7 @@ public class HeroService {
         Hero hero = heroRepo.findById(Long.valueOf(heroId)).orElse(null);
 
         if (Objects.isNull(hero)) {
-            String message = String.format("Hero with id %s not found in database", heroId);
+            String message = String.format("Hero with id %s not found", heroId);
             log.info(message);
             throw new ResourceNotFoundException(message);
         } else {
@@ -82,9 +88,21 @@ public class HeroService {
             hero.setPowers(apiHero.getPowers());
             hero.setName(apiHero.getHeroName());
             hero.setRealIdentity(apiHero.getRealIdentity());
+            hero.setTeamAffiliation(getTeamByName(apiHero.getTeamAffiliation()));
             heroRepo.save(hero);
         }
 
         return APIMapper.convertHeroToAPIHero(hero);
+    }
+
+    private TeamAffiliation getTeamByName(String teamName) {
+        TeamAffiliation team = StringUtils.isNotBlank(teamName) ? teamRepo.findByNameIgnoreCase(teamName) : null;
+        if(team == null) {
+            String message = String.format("Team Affiliation with name: %s, does not exist. " +
+                    "Please try again with different Team Affiliation name or create new team.", teamName);
+            log.info(message);
+            throw new ResourceNotFoundException(message);
+        }
+        return team;
     }
 }

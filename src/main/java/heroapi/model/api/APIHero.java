@@ -15,4 +15,5 @@ public class APIHero {
     private String realIdentity;
     private String powers;
     private String weaknesses;
+    private String teamAffiliation;
 }

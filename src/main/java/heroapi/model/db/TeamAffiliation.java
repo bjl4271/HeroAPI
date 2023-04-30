@@ -16,7 +16,7 @@ public class TeamAffiliation {
     @GeneratedValue
     @Column(name="team_affiliation_id")
     private Long teamAffiliationId;
-    @Column(name="team_name")
+    @Column(name="team_name", nullable = false)
     private String teamName;
 
     @OneToMany(mappedBy = "teamAffiliation")
