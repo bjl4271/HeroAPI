@@ -6,7 +6,6 @@ import heroapi.exception.APIException;
 import heroapi.exception.ResourceNotFoundException;
 import heroapi.exception.RestExceptionHandler;
 import heroapi.model.api.APIHero;
-import heroapi.model.api.APIVillain;
 import heroapi.service.HeroService;
 import heroapi.service.VillainService;
 import org.junit.jupiter.api.BeforeEach;

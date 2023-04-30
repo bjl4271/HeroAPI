@@ -5,7 +5,7 @@ import java.util.List;
 import java.util.Objects;
 
 import heroapi.model.db.TeamAffiliation;
-import heroapi.model.repository.TeamAfilliationRepository;
+import heroapi.model.repository.TeamAffiliationRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,10 +22,10 @@ import heroapi.util.APIMapper;
 @Service
 public class HeroService {
     private HeroRepository heroRepo;
-    private TeamAfilliationRepository teamRepo;
+    private TeamAffiliationRepository teamRepo;
 
     @Autowired
-    public HeroService(HeroRepository heroRepo, TeamAfilliationRepository teamRepo) {
+    public HeroService(HeroRepository heroRepo, TeamAffiliationRepository teamRepo) {
         this.heroRepo = heroRepo;
         this.teamRepo = teamRepo;
     }
