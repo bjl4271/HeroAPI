@@ -96,7 +96,7 @@ public class HeroService {
     }
 
     private TeamAffiliation getTeamByName(String teamName) {
-        TeamAffiliation team = StringUtils.isNotBlank(teamName) ? teamRepo.findByNameIgnoreCase(teamName) : null;
+        TeamAffiliation team = StringUtils.isNotBlank(teamName) ? teamRepo.findByTeamNameIgnoreCase(teamName) : null;
         if(team == null) {
             String message = String.format("Team Affiliation with name: %s, does not exist. " +
                     "Please try again with different Team Affiliation name or create new team.", teamName);
