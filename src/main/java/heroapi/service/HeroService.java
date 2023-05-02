@@ -31,6 +31,7 @@ public class HeroService {
     }
 
     public APIHero createHero(APIHero apiHero) throws APIException {
+        // TODO: add null check here for APIHero
         if (Objects.nonNull(apiHero.getHeroId())) {
             throw new APIException("hero_id is auto-generated and cannot have a value");
         }
